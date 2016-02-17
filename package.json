@@ -1,0 +1,22 @@
+{
+  "name": "jquery-2928",
+  "version": "1.0.0",
+  "description": "Repro for jquery/jquery#2928",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tuespetre/jquery-2928.git"
+  },
+  "author": "Derek Gray",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tuespetre/jquery-2928/issues"
+  },
+  "homepage": "https://github.com/tuespetre/jquery-2928#readme",
+  "dependencies": {
+    "express": "^4.13.4"
+  }
+}

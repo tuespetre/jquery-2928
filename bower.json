@@ -1,0 +1,22 @@
+{
+  "name": "jquery-2928",
+  "description": "Repro for jquery/jquery#2928",
+  "main": "index.js",
+  "authors": [
+    "Derek Gray"
+  ],
+  "license": "MIT",
+  "moduleType": [],
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.3.6"
+  }
+}

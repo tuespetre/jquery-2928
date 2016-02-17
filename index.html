@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>jquery/jquery#2928 repro</title>
+	<link rel="reauthenticate" href="reauthenticate" />
+	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css" />
+	<script src="bower_components/jquery/dist/jquery.min.js"></script>
+	<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<header class="navbar navbar-inverse navbar-static-top">
+		<div class="container">
+			<span class="navbar-header">
+				<a class="navbar-brand" href="/">
+					jquery/jquery#2928 repro
+				</a>
+			</span>
+		</div>
+	</header>
+	<main>
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-12">
+					<div class="jumbotron text-center">
+						<h1>
+							Choose a pill.
+						</h1>
+						<p class="lead">
+							The blue pill will successfully load something into a modal.
+							<br />
+							The red pill will fail to load something into a modal at first, and then succeed on retry.
+						</p>
+						<div>
+							<button data-href="modal-success" class="btn btn-lg btn-primary" 
+							   data-toggle="modal" data-target="#example-modal">
+								The blue pill
+							</button>
+							<button data-href="modal-failure" class="btn btn-lg btn-danger" 
+							   data-toggle="modal" data-target="#example-modal">
+								The red pill
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+    <div class="modal fade" id="example-modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">Example Modal</h4>
+                </div>
+                <div class="modal-body">
+					<pre>					
+					</pre>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="error-modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">Error</h4>
+                </div>
+                <div class="modal-body">
+                    An error has occurred while trying to perform the requested action.
+                    Please try again or reload the page.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                        Close
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="window.location.reload()">
+                        Reload page
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+	<script>
+        $.ajaxSetup({
+            statusCode: {
+                401: function () {
+                    var $settings = this;
+                    var auth = $('link[rel~=reauthenticate]').prop('href');
+                    var opts = { xhrFields: { withCredentials: true } };
+
+                    $.ajax(auth, opts)
+                        .done(function () {
+                            $.ajax($settings);
+                        })
+                        .fail(function () {
+                            $('#error-modal').modal('show');
+                        });
+                }
+            }
+        });
+		
+		$('#example-modal').on('show.bs.modal', function (event) {
+            var $link = $(event.relatedTarget);
+            var $modal = $(this);
+
+            var url = $link.data('href');
+
+            $.get(url, function (headers) {
+                $modal.find('.modal-body pre').text(JSON.stringify(headers, null, 2));
+            });
+        });
+	</script>
+</body>
+</html>
